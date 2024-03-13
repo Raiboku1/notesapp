@@ -14,6 +14,9 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateNote }) => {
     const clickUpdate = (val) => {
         setShowUpdateInput(true)
     }
+    const clickCancel = (val) => {
+        setShowUpdateInput(false)
+    }
     const onNotesChange = (val) => {
         setNote([
             { val },
@@ -42,18 +45,28 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateNote }) => {
                         </View>
                     </View>}
                     {/* mao ni ang mo ilis sa update ug delete na buton */}
-                    <View style={{ width: '100%' }}>
+                    <View style={styles.fixToTextSave}>
                         {showUpdateInput &&
                             (
-                                <View>
+                                <View style={styles.fixToText2}>
                                     <TextInput
                                         style={styles.input}
+                                        value={setNote}
+                                        placeholder="Type Note Here..."
+                                        onChangeText={onNotesChange}
                                     />
-                                    <Pressable
-                                        style={styles.saveButton}
-                                        onPress={clickUpdate()}>
-                                        <Text> Save </Text>
-                                    </Pressable>
+                                    <View style={styles.fixToTextInternal}>
+                                        <Pressable
+                                            style={styles.saveButton}
+                                            onPress={() => clickUpdate()}>
+                                            <Text style={styles.buttonTextStyle}> Save </Text>
+                                        </Pressable>
+                                        <Pressable
+                                            style={styles.saveButton}
+                                            onPress={() => clickCancel()}>
+                                            <Text style={styles.buttonTextStyle}> Cancel </Text>
+                                        </Pressable>
+                                    </View>
                                 </View>
                             )
                         }
@@ -92,8 +105,11 @@ const styles = StyleSheet.create({
     input: {
         height: 40,
         margin: 12,
-        borderWidth: 1,
+        borderBottomWidth: 1,
         padding: 10,
+        width: 180,
+        color: 'white',
+        textDecorationColor: 'white'
     },
     Table: {
         borderWidth: 1,
@@ -143,6 +159,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     fixToText2: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    fixToTextSave: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    fixToTextInternal: {
+        position: 'absolute',
+        left: 200,
+        bottom: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },

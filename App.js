@@ -32,6 +32,17 @@ export default function App() {
     createNoteDB(data)
   }
 
+  const updateNote = (data) => {
+    let copyAllNotes = [...allNotes]
+    let _index = copyAllNotes.findIndex((item) => {
+      return item.id == data.id
+    })
+    if (_index > -1) {
+      copyAllNotes.splice(_index, 1) // splice(index or asa mag start ug delete, pila ang gusto i delete)
+      setAllNotes(copyAllNotes)
+      updateNoteDB(data.id)
+    }
+  }
   const deleteNote = (data) => {
     let copyAllNotes = [...allNotes]
     let _index = copyAllNotes.findIndex((item) => {
@@ -104,7 +115,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       {screen == screenType.home && <HomeScreen setScreen={onSetScreen}></HomeScreen>}
       {screen == screenType.addNote && <AddNoteScreen setScreen={onSetScreen} list={onSetList}></AddNoteScreen>}
-      {screen == screenType.allNote && <AllNoteScreen setScreen={onSetScreen} list={allNotes} deleteNote={deleteNote}></AllNoteScreen>}
+      {screen == screenType.allNote && <AllNoteScreen setScreen={onSetScreen} list={allNotes} deleteNote={deleteNote} updateNote={updateNote}></AllNoteScreen>}
     </SafeAreaView>
   );
 }
