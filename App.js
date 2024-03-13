@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Button, SafeAreaView, SafeAreaViewBase, StyleSheet, Text, View } from 'react-native';
 import HomeScreen from './screens/HomeScreen';
 import AddNoteScreen from './screens/AddNoteScreen';
 import AllNoteScreen from './screens/AllNoteScreen';
@@ -23,7 +23,7 @@ export default function App() {
   }
 
   const onSetList = (val) => {
-    console.log({val})
+    console.log({ val })
     let copyAllNotes = [...allNotes]
     let data = { id: Date.now(), note: val }
     // copyAllNotes.unshift(data)
@@ -37,7 +37,7 @@ export default function App() {
     let _index = copyAllNotes.findIndex((item) => {
       return item.id == data.id
     })
-    if(_index > -1){
+    if (_index > -1) {
       copyAllNotes.splice(_index, 1) // splice(index or asa mag start ug delete, pila ang gusto i delete)
       setAllNotes(copyAllNotes)
       deleteNoteDB(data.id)
@@ -72,7 +72,7 @@ export default function App() {
         null,
         (txObj, resultSet) => {
           console.log({ resultSet: resultSet.rows._array })
-            setAllNotes(resultSet.rows._array)
+          setAllNotes(resultSet.rows._array)
         },
         (txObj, error) => { console.log(error) }
       );
@@ -101,15 +101,17 @@ export default function App() {
 
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       {screen == screenType.home && <HomeScreen setScreen={onSetScreen}></HomeScreen>}
       {screen == screenType.addNote && <AddNoteScreen setScreen={onSetScreen} list={onSetList}></AddNoteScreen>}
       {screen == screenType.allNote && <AllNoteScreen setScreen={onSetScreen} list={allNotes} deleteNote={deleteNote}></AllNoteScreen>}
-      <View>
-        <Text>{screen}</Text>
-      </View>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#EEEEEE',
+    flex: 1
+  }
+});
