@@ -6,7 +6,7 @@ import AddNoteScreen from './AddNoteScreen'
 const HomeScreen = ({ setScreen }) => {
     return (
         <SafeAreaView>
-            <Header></Header>
+            <Header title={'Notes Application'}></Header>
             <View style={styles.container}>
                 <Pressable style={styles.buttonStyle}
                     onPress={() => { setScreen('AddNotes') }}>

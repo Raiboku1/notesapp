@@ -3,25 +3,33 @@ import React, { useState } from 'react'
 import Header from '../components/Header'
 import NoteHeader from '../components/NoteHeader'
 
-const AllNoteScreen = ({ setScreen, list, deleteNote, updateNote }) => {
+const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wala pa na test ang updateNote ug itemId
 
-    const [showUpdateInput, setShowUpdateInput] = useState(clickUpdate ? true : false);
     const [note, setNote] = useState(' ');
+    const [itemId, setItemId] = useState(' ');
 
     const clickDelete = (val) => {
         deleteNote(val)
     }
-    const clickUpdate = (val) => {
-        setShowUpdateInput(true)
+    const clickUpdate = (data) => {
+        setItemId(data.id)
+        console.log(data.id)
     }
-    const clickCancel = (val) => {
-        setShowUpdateInput(false)
+    const clickSave = (note, dataId) => {
+        updateToList(note, dataId) // Added Update Note (3/14/24)
+        console.log(note, dataId)
+        setItemId('')
+    }
+    const clickCancel = () => {
+        setItemId('')
     }
     const onNotesChange = (val) => {
-        setNote([
-            { val },
-        ])
+        setNote(val)
     }
+    const backButtonClick = (val) => {
+        setScreen(val)
+    } 
+
     const renderItem = () => {
         let myLists = []
         console.log({ list });
@@ -29,8 +37,9 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateNote }) => {
             const element = list[i];
             let content = (
                 <View style={styles.Table}>
-                    {!showUpdateInput && <View style={styles.fixToText2}>
+                    {itemId!=element.id && <View style={styles.fixToText2}>
                         <Text style={styles.mainText}>{element.note}</Text>
+                        {/*need nako makuha ang string ani na text feild... pero unsaooooooooon? */}
                         <View style={styles.fixToText}>
                             <Pressable
                                 style={styles.updateButton}
@@ -45,30 +54,31 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateNote }) => {
                         </View>
                     </View>}
                     {/* mao ni ang mo ilis sa update ug delete na buton */}
+
+                    {/* make it na sa isa lang ka row mo gawas ang edit save */}
                     <View style={styles.fixToTextSave}>
-                        {showUpdateInput &&
-                            (
-                                <View style={styles.fixToText2}>
-                                    <TextInput
-                                        style={styles.input}
-                                        value={setNote}
-                                        placeholder="Type Note Here..."
-                                        onChangeText={onNotesChange}
-                                    />
-                                    <View style={styles.fixToTextInternal}>
-                                        <Pressable
-                                            style={styles.saveButton}
-                                            onPress={() => clickUpdate()}>
-                                            <Text style={styles.buttonTextStyle}> Save </Text>
-                                        </Pressable>
-                                        <Pressable
-                                            style={styles.saveButton}
-                                            onPress={() => clickCancel()}>
-                                            <Text style={styles.buttonTextStyle}> Cancel </Text>
-                                        </Pressable>
-                                    </View>
-                                </View>
-                            )
+                        {itemId==element.id && (<View style={styles.fixToText2}>
+                            <TextInput
+                                style={styles.input}
+                                value={setNote}
+                                placeholder="Type Note Here..."
+                                placeholderTextColor="white"
+                                onChangeText={onNotesChange}
+                            />
+                            <View style={styles.fixToTextInternal}>
+                                <Pressable
+                                    style={styles.saveButton}
+                                    onPress={() => {clickSave(note, element.id)}}>
+                                    <Text style={styles.buttonTextStyle}> Save </Text>
+                                </Pressable>
+                                <Pressable
+                                    style={styles.cancelButton}
+                                    onPress={() => clickCancel()}>
+                                    <Text style={styles.buttonTextStyle}> Cancel </Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                        )
                         }
                     </View>
                 </View>
@@ -81,17 +91,10 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateNote }) => {
     return (
         <View>
             <View>
-                <Header></Header>
+                <Header title={'All Notes'} showBack={true} clickBack={backButtonClick}></Header>
             </View>
             <View>
                 <Text style={styles.normalText}>All Notes:</Text>
-            </View>
-            <View>
-                <Pressable
-                    style={styles.backButtonStyle}
-                    onPress={() => { setScreen('Home') }}>
-                    <Text style={styles.buttonTextStyle}>Back</Text>
-                </Pressable>
             </View>
             <View>
                 {renderItem()}
@@ -106,10 +109,10 @@ const styles = StyleSheet.create({
         height: 40,
         margin: 12,
         borderBottomWidth: 1,
+        borderColor: 'white',
         padding: 10,
         width: 180,
         color: 'white',
-        textDecorationColor: 'white'
     },
     Table: {
         borderWidth: 1,
@@ -151,9 +154,19 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: 'black',
     },
+    cancelButton: {
+        width: 90,
+        backgroundColor: '#76ABAE',
+        padding: 5,
+        alignItems: 'center',
+        borderWidth: StyleSheet.hairlineWidth,
+        borderRadius: 5,
+        borderColor: 'black',
+        left: 5
+    },
     fixToText: {
         position: "absolute",
-        left: 180,
+        left: 190,
         bottom: -3,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -165,6 +178,7 @@ const styles = StyleSheet.create({
     fixToTextSave: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        right: 10
     },
     fixToTextInternal: {
         position: 'absolute',
@@ -181,7 +195,6 @@ const styles = StyleSheet.create({
     normalText: {
         fontSize: 24,
         left: 10,
-        top: 25
     },
     buttonTextStyle: {
         color: 'white',

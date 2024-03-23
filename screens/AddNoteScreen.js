@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react'
 import Header from '../components/Header'
 import NoteHeader from '../components/NoteHeader'
 
-const AddNoteScreen = ({ setScreen, list }) => {
+const AddNoteScreen = ({ setScreen, addToList }) => {
     // const [note, setNote] = useState(" ")
 
     const [note, setNote] = useState(" ")
@@ -12,10 +12,13 @@ const AddNoteScreen = ({ setScreen, list }) => {
         setNote(Text)
     }
 
+    const backButtonClick = (val) => {
+        setScreen(val)
+    }
     return (
         <View style={styles.Screen}>
             <View>
-                <Header></Header>
+                <Header title={'Add Notes'} showBack={true} clickBack={backButtonClick}></Header>
             </View>
             <View>
                 <Text style={styles.normalText}>Note:</Text>
@@ -26,18 +29,10 @@ const AddNoteScreen = ({ setScreen, list }) => {
                     onChangeText={onNoteChange} />
                 <Pressable
                     style={styles.addButtonStyle}
-                    onPress={() => { list(note), setScreen('AllNotes') }}>
+                    onPress={() => { addToList(note), setScreen('AllNotes') }}>
                     <Text style={styles.buttonTextStyle}>Add</Text>
                 </Pressable>
             </View>
-            <View>
-                <Pressable
-                    style={styles.backButtonStyle}
-                    onPress={() => { setScreen('Home') }}>
-                    <Text style={styles.buttonTextStyle}>Back</Text>
-                </Pressable>
-            </View>
-
         </View>
     )
 }

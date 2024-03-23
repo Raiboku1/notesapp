@@ -7,10 +7,10 @@ import { useState, useEffect } from 'react';
 import * as SQLite from 'expo-sqlite'
 
 export default function App() {
-  const [db, setDb] = useState(SQLite.openDatabase('example2.db'));
-  const [screen, setScreen] = useState('Home')
-  const [allNotes, setAllNotes] = useState([
-  ]);
+  const [db, setDb] = useState(SQLite.openDatabase('example2.db')); // getter setter sa sql
+  const [screen, setScreen] = useState('Home') // getter setter sa screen display
+  const [allNotes, setAllNotes] = useState([]); // getter setter para sa display ug adding data
+  const [noteId, setNoteId] = useState(' ');
 
   const onSetScreen = (val) => {
     setScreen(val)
@@ -22,7 +22,7 @@ export default function App() {
     allNote: 'AllNotes'
   }
 
-  const onSetList = (val) => {
+  const onSetList = (val) => { // data display and adding
     console.log({ val })
     let copyAllNotes = [...allNotes]
     let data = { id: Date.now(), note: val }
@@ -32,18 +32,25 @@ export default function App() {
     createNoteDB(data)
   }
 
-  const updateNote = (data) => {
+  const updateNote = (noteData, dataId) => { // dire magkuha sa item ID for update ug mag set sa table sa updated value
     let copyAllNotes = [...allNotes]
     let _index = copyAllNotes.findIndex((item) => {
-      return item.id == data.id
+      return item.id == dataId
     })
+    let newObj = {
+      id: dataId,
+      note: noteData
+    }
+    console.log({newObj, _index}, dataId)
     if (_index > -1) {
-      copyAllNotes.splice(_index, 1) // splice(index or asa mag start ug delete, pila ang gusto i delete)
+      copyAllNotes.splice(_index, 1, newObj)
+      console.log(copyAllNotes)
+      updateNoteDB(newObj)
       setAllNotes(copyAllNotes)
-      updateNoteDB(data.id)
     }
   }
-  const deleteNote = (data) => {
+
+  const deleteNote = (data) => { // data deletion okay nani
     let copyAllNotes = [...allNotes]
     let _index = copyAllNotes.findIndex((item) => {
       return item.id == data.id
@@ -114,8 +121,8 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       {screen == screenType.home && <HomeScreen setScreen={onSetScreen}></HomeScreen>}
-      {screen == screenType.addNote && <AddNoteScreen setScreen={onSetScreen} list={onSetList}></AddNoteScreen>}
-      {screen == screenType.allNote && <AllNoteScreen setScreen={onSetScreen} list={allNotes} deleteNote={deleteNote} updateNote={updateNote}></AllNoteScreen>}
+      {screen == screenType.addNote && <AddNoteScreen setScreen={onSetScreen} addToList={onSetList}></AddNoteScreen>}
+      {screen == screenType.allNote && <AllNoteScreen setScreen={onSetScreen} list={allNotes} deleteNote={deleteNote} updateToList={updateNote} ></AllNoteScreen>}
     </SafeAreaView>
   );
 }
