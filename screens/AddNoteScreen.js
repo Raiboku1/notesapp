@@ -2,9 +2,11 @@ import { Button, Pressable, StyleSheet, Text, TextInput, TextInputBase, View } f
 import React, { Component, useState } from 'react'
 import Header from '../components/Header'
 import NoteHeader from '../components/NoteHeader'
+import { useSelector } from 'react-redux'
 
 const AddNoteScreen = ({ setScreen, addToList }) => {
     // const [note, setNote] = useState(" ")
+    const currentUser = useSelector((state) => state.currentUser.value)
 
     const [note, setNote] = useState(" ")
 
@@ -32,6 +34,11 @@ const AddNoteScreen = ({ setScreen, addToList }) => {
                     onPress={() => { addToList(note), setScreen('AllNotes') }}>
                     <Text style={styles.buttonTextStyle}>Add</Text>
                 </Pressable>
+            </View>
+            <View>
+                <Text>
+                    {`${currentUser.firstName} ${currentUser.lastName}`}
+                </Text>
             </View>
         </View>
     )

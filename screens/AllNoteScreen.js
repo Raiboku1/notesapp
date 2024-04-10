@@ -1,12 +1,13 @@
 import { Button, Pressable, StyleSheet, Text, TextInput, TextInputBase, View, VirtualizedList } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../components/Header'
-import NoteHeader from '../components/NoteHeader'
+import { useSelector } from 'react-redux'
 
-const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wala pa na test ang updateNote ug itemId
-
+const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wala pa na test ang updateNote ug itemI
     const [note, setNote] = useState(' ');
     const [itemId, setItemId] = useState(' ');
+
+    const currentUser = useSelector((state) => state.currentUser.value)
 
     const clickDelete = (val) => {
         deleteNote(val)
@@ -28,7 +29,7 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wa
     }
     const backButtonClick = (val) => {
         setScreen(val)
-    } 
+    }
 
     const renderItem = () => {
         let myLists = []
@@ -37,7 +38,7 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wa
             const element = list[i];
             let content = (
                 <View style={styles.Table}>
-                    {itemId!=element.id && <View style={styles.fixToText2}>
+                    {itemId != element.id && <View style={styles.fixToText2}>
                         <Text style={styles.mainText}>{element.note}</Text>
                         {/*need nako makuha ang string ani na text feild... pero unsaooooooooon? */}
                         <View style={styles.fixToText}>
@@ -57,7 +58,7 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wa
 
                     {/* make it na sa isa lang ka row mo gawas ang edit save */}
                     <View style={styles.fixToTextSave}>
-                        {itemId==element.id && (<View style={styles.fixToText2}>
+                        {itemId == element.id && (<View style={styles.fixToText2}>
                             <TextInput
                                 style={styles.input}
                                 value={setNote}
@@ -68,7 +69,7 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wa
                             <View style={styles.fixToTextInternal}>
                                 <Pressable
                                     style={styles.saveButton}
-                                    onPress={() => {clickSave(note, element.id)}}>
+                                    onPress={() => { clickSave(note, element.id) }}>
                                     <Text style={styles.buttonTextStyle}> Save </Text>
                                 </Pressable>
                                 <Pressable
@@ -98,6 +99,11 @@ const AllNoteScreen = ({ setScreen, list, deleteNote, updateToList }) => { // wa
             </View>
             <View>
                 {renderItem()}
+            </View>
+            <View>
+                <Text>
+                    {`${currentUser.firstName} ${currentUser.lastName}`}
+                </Text>
             </View>
         </View>
     )
