@@ -1,7 +1,6 @@
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import Header from '../components/Header'
-import AddNoteScreen from './AddNoteScreen'
 import { Button } from 'react-native-paper';
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -23,20 +22,43 @@ const HomeScreen = ({ setScreen }) => {
     return (
         <SafeAreaView>
             <Header title={'Notes Application'}></Header>
-            <View style={styles.container}>
-                <Pressable style={styles.buttonStyle}
-                    onPress={() => { setScreen('AddNotes') }}>
-                    <Text style={styles.textStyle}>Add Notes</Text>
-                </Pressable>
+            <View>
+                <Text> Database: </Text>
+                <View style={styles.container}>
+                    <Pressable style={styles.buttonStyle}
+                        onPress={() => { setScreen('AddNotes') }}>
+                        <Text style={styles.textStyle}>Add Notes</Text>
+                    </Pressable>
+                </View>
+                <View style={styles.container}>
+                    <Pressable style={styles.buttonStyle}
+                        title='View All'
+                        onPress={() => { setScreen('AllNotes') }}>
+                        <Text style={styles.textStyle}>View All</Text>
+                    </Pressable>
+                </View>
             </View>
-            <View style={styles.container}>
-                <Pressable style={styles.buttonStyle}
-                    title='View All'
-                    onPress={() => { setScreen('AllNotes') }}>
-                    <Text style={styles.textStyle}>View All</Text>
-                </Pressable>
+            <View>
+                <Text> API: </Text>
+                <View style={styles.container}>
+                    <Pressable style={styles.buttonStyle}
+                        onPress={() => { setScreen('AddNoteApi') }}>
+                        <Text style={styles.textStyle}>Add Notes</Text>
+                    </Pressable>
+                </View>
+                <View style={styles.container}>
+                    <Pressable style={styles.buttonStyle}
+                        title='View All'
+                        onPress={() => { setScreen('AllNotesApi') }}>
+                        <Text style={styles.textStyle}>View All</Text>
+                    </Pressable>
+                </View>
             </View>
-            <Button icon="camera" mode="contained" onPress={() => updateCurrentUser()}>
+            <Button
+                icon="camera"
+                mode="contained"
+                onPress={() => updateCurrentUser()}
+                style={styles.pButtonStyle}>
                 Press me
             </Button>
             <View>
@@ -70,5 +92,11 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: 'white'
+    },
+    pButtonStyle: {
+        display: 'flex',
+        width: 200,
+        alignSelf: 'center',
+        top: 10
     }
 })
